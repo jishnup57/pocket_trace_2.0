@@ -54,6 +54,9 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        //added in debug time
+        multiDexEnabled true
+        //remove this after edit
     }
 
     signingConfigs {

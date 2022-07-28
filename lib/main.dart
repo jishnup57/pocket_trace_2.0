@@ -5,7 +5,7 @@ import 'package:month_year_picker/month_year_picker.dart';
 import 'package:one/Model/Transaction/transaction_model.dart';
 import 'package:one/Model/bill/bill_model.dart';
 import 'package:one/Model/category/category_model.dart';
-import 'package:one/screen/splashscreen/splash.dart';
+import 'package:one/view/splashscreen/splash.dart';
 import 'db/category/category_db.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:flutter/services.dart';
