@@ -3,8 +3,8 @@ import 'package:intl/intl.dart';
 import 'package:one/Model/Transaction/transaction_model.dart';
 import 'package:one/Model/category/category_model.dart';
 import 'package:one/color/app_colors.dart' as appcolor;
-import 'package:one/db/category/category_db.dart';
-import 'package:one/db/transaction/transaction_db.dart';
+import 'package:one/view_model/category/category_db.dart';
+import 'package:one/view_model/transaction/transaction_db.dart';
 
 
 // ignore: must_be_immutable

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:one/db/transaction/transaction_db.dart';
-
 import 'package:one/view/splashscreen/splash.dart';
+import 'package:one/view_model/transaction/transaction_db.dart';
 
 Dialog dialogShow(BuildContext context) {
   return Dialog(

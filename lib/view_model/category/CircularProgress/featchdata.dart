@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:one/db/category/CircularProgress/functions/chartfunction.dart';
+import 'package:one/view_model/category/CircularProgress/functions/chartfunction.dart';
+
 
 
 

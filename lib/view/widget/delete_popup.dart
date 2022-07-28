@@ -1,6 +1,6 @@
  import 'package:flutter/material.dart';
-import 'package:one/db/category/category_db.dart';
-import 'package:one/db/transaction/transaction_db.dart';
+import 'package:one/view_model/category/category_db.dart';
+import 'package:one/view_model/transaction/transaction_db.dart';
 
 
 Future<void> showDeletePopUp(BuildContext context,{transactionid,categoryId}) async {

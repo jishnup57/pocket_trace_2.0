@@ -17,8 +17,8 @@
 // }
 
 import 'package:flutter/material.dart';
+import 'package:one/view_model/transaction/transaction_db.dart';
 
-import 'package:one/db/transaction/transaction_db.dart';
 import 'package:pie_chart/pie_chart.dart';
 
 Widget overAllChart(){

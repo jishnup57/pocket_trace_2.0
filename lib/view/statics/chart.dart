@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:one/db/category/CircularProgress/functions/chartfunction.dart';
-import 'package:one/db/category/category_db.dart';
-import 'package:one/db/transaction/transaction_db.dart';
 import 'package:one/view/Statics/piechart.dart';
 import 'package:one/view/widget/empty_graph_show.dart';
+import 'package:one/view_model/category/CircularProgress/functions/chartfunction.dart';
+import 'package:one/view_model/category/category_db.dart';
+import 'package:one/view_model/transaction/transaction_db.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:one/color/app_colors.dart' as appcolor;
+
+
 
 class Chart extends StatefulWidget {
   const Chart({Key? key}) : super(key: key);

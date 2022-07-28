@@ -3,8 +3,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:one/Model/Transaction/transaction_model.dart';
 import 'package:one/Model/category/category_model.dart';
-import 'package:one/db/category/category_db.dart';
 import 'package:one/main.dart';
+import 'package:one/view_model/category/category_db.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const transactiondbname = 'transaction_db';

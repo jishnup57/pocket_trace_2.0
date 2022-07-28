@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:one/color/app_colors.dart' as appcolor;
-import 'package:one/db/transaction/transaction_db.dart';
+import 'package:one/view_model/transaction/transaction_db.dart';
+
 
 class ScreenWallet extends StatelessWidget {
  const ScreenWallet({Key? key}) : super(key: key);

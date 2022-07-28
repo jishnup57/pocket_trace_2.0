@@ -4,10 +4,10 @@ import 'package:intl/intl.dart';
 import 'package:one/Model/Transaction/transaction_model.dart';
 import 'package:one/color/app_colors.dart' as appcolor;
 import 'package:one/view/widget/snakbar.dart';
+import 'package:one/view_model/category/category_db.dart';
+import 'package:one/view_model/transaction/transaction_db.dart';
 
 import '../../Model/category/category_model.dart';
-import '../../db/category/category_db.dart';
-import '../../db/transaction/transaction_db.dart';
 import '../Categories/categories.dart';
 
 class Expense extends StatefulWidget {

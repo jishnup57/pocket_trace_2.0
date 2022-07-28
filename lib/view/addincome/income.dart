@@ -3,10 +3,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:one/Model/category/category_model.dart';
 import 'package:one/color/app_colors.dart' as appcolor;
-import 'package:one/db/category/category_db.dart';
-import 'package:one/db/transaction/transaction_db.dart';
 import 'package:one/view/Categories/categories.dart';
 import 'package:one/view/widget/snakbar.dart';
+import 'package:one/view_model/category/category_db.dart';
+import 'package:one/view_model/transaction/transaction_db.dart';
 
 import '../../Model/Transaction/transaction_model.dart';
 

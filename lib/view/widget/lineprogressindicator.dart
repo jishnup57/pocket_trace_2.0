@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:one/db/category/CircularProgress/functions/functions.dart';
-import 'package:one/db/transaction/transaction_db.dart';
+import 'package:one/view_model/transaction/transaction_db.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
 Widget linearProgressIndicator(context) {

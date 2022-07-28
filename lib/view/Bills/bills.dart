@@ -3,19 +3,25 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:one/Model/bill/bill_model.dart';
 import 'package:one/color/app_colors.dart' as appcolor;
-import 'package:one/db/bill/billdb.dart';
+import 'package:one/view_model/bill/billdb.dart';
 
 class ScreenBills extends StatefulWidget {
   const ScreenBills({Key? key}) : super(key: key);
 
   @override
   State<ScreenBills> createState() => _ScreenBillsState();
+  
 }
 
 class _ScreenBillsState extends State<ScreenBills> {
   DateTime? _selectedDate;
   final titlecontroller = TextEditingController();
   final amountController = TextEditingController();
+  @override
+  void dispose() {
+ 
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
@@ -243,7 +249,8 @@ class _ScreenBillsState extends State<ScreenBills> {
           margin: EdgeInsets.all(10),
           backgroundColor: Colors.black,
           content: Text('Bill added successfully...'),),);
-
-
+      titlecontroller.clear();
+      amountController.clear();
+      _selectedDate == null;
   }
 }
