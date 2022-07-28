@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:one/util/color/app_colors.dart';
 import 'package:one/view/Statics/piechart.dart';
 import 'package:one/view/widget/empty_graph_show.dart';
 import 'package:one/view_model/category/CircularProgress/functions/chartfunction.dart';
 import 'package:one/view_model/category/category_db.dart';
 import 'package:one/view_model/transaction/transaction_db.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:one/color/app_colors.dart' as appcolor;
 
 
 
@@ -53,7 +53,7 @@ class _ChartState extends State<Chart> {
           padding: EdgeInsets.only(top: height / 25),
           child: const Text('Statitics', textScaleFactor: 1.5),
         ),
-        backgroundColor: appcolor.buttonBlue,
+        backgroundColor: kBlueColor,
         centerTitle: true,
       ),
       body:  Column(

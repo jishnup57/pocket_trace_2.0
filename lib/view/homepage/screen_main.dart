@@ -3,8 +3,8 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:one/Model/Transaction/transaction_model.dart';
 import 'package:one/Model/category/category_model.dart';
-import 'package:one/color/app_colors.dart' as appcolor;
 import 'package:one/db/category/CircularProgress/functions/functions.dart';
+import 'package:one/util/color/app_colors.dart';
 import 'package:one/view/Bills/bill_list.dart';
 import 'package:one/view/Transactions/all_transactions.dart';
 import 'package:one/view/screen_edit/edit.dart';
@@ -62,7 +62,7 @@ class ScreenHome extends StatelessWidget {
             bottom: Radius.elliptical(15, 15),
           ),
         ),
-        backgroundColor: appcolor.buttonBlue,
+        backgroundColor: kBlueColor,
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),

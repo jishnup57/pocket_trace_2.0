@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:one/Model/bill/bill_model.dart';
-import 'package:one/color/app_colors.dart' as appcolor;
+import 'package:one/util/color/app_colors.dart';
 import 'package:one/view_model/bill/billdb.dart';
 class ShowBill extends StatefulWidget {
   const ShowBill({Key? key}) : super(key: key);
@@ -22,7 +22,7 @@ class _ShowBillState extends State<ShowBill> {
           'Reminder',
           textScaleFactor: 1.2,
         ),
-        backgroundColor: appcolor.buttonBlue,
+        backgroundColor: kBlueColor,
         centerTitle: true,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(

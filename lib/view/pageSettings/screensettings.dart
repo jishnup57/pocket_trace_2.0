@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:one/color/app_colors.dart' as appcolor;
 import 'package:one/db/category/CircularProgress/functions/functions.dart';
+import 'package:one/util/color/app_colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -21,7 +21,7 @@ class Settings extends StatelessWidget {
           ),
          // toolbarHeight: height/8,
           title: const Text('Settings', textScaleFactor: 1.3),
-          backgroundColor: appcolor.buttonBlue,
+          backgroundColor: kBlueColor,
           centerTitle: true,
         ),
         body: Padding(
@@ -100,7 +100,7 @@ class Settings extends StatelessWidget {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(14),
                             ),
-                            primary: appcolor.buttonBlue),
+                            primary: kBlueColor),
                       ),
                     )
                   ],

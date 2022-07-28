@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:one/util/color/app_colors.dart';
 import 'package:one/view/Bills/bills.dart';
 import 'package:one/view/Homepage/screen_main.dart';
 import 'package:one/view/Statics/chart.dart';
 import 'package:one/view/Wallet/wallet.dart';
 import 'package:one/view/widget/bottomnav.dart';
 import 'package:one/view/widget/floating_button.dart';
-import 'package:one/color/app_colors.dart' as appcolor;
+
 
 class MainScreen extends StatelessWidget {
   MainScreen({Key? key}) : super(key: key);
@@ -24,7 +25,7 @@ class MainScreen extends StatelessWidget {
       appBar: AppBar(
         toolbarHeight: 2,
         elevation: 0,
-        backgroundColor: appcolor.buttonBlue,
+        backgroundColor: kBlueColor,
       ),
       body: SafeArea(
         child:ValueListenableBuilder(valueListenable: selectedIndexNotifier,

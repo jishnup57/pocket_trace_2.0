@@ -1,8 +1,8 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:one/color/app_colors.dart' as appcolor;
 import 'package:one/main.dart';
+import 'package:one/util/color/app_colors.dart';
 import 'package:one/view/Homepage/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 String username='';
@@ -41,18 +41,18 @@ class StartScreen extends StatelessWidget {
                     decoration: const InputDecoration(
                       prefixIcon: Icon(
                         Icons.person,
-                        color: appcolor.buttonBlue,
+                        color: kBlueColor,
                       ),
                       hintText: 'Username',
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: appcolor.buttonBlue,
+                          color: kBlueColor,
                           width: 2.0,
                         ),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderSide:
-                            BorderSide(color: appcolor.buttonBlue, width: 2.0),
+                            BorderSide(color: kBlueColor, width: 2.0),
                       ),
                     ),
                   ),
@@ -70,7 +70,7 @@ class StartScreen extends StatelessWidget {
                             ),
                           ),
                           backgroundColor:
-                              MaterialStateProperty.all(appcolor.buttonBlue)),
+                              MaterialStateProperty.all(kBlueColor)),
                       onPressed: () {
                         setLogedIn(context);
                       },

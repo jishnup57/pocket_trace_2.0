@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:one/color/app_colors.dart' as appcolor;
+import 'package:one/util/color/app_colors.dart';
 import 'package:one/view/Homepage/home.dart';
 
 // ignore: must_be_immutable
@@ -52,14 +52,14 @@ class AppBottomNavBar extends StatelessWidget {
                           children: [
                             Icon(
                                 changer == 3 ? Icons.home : Icons.home_outlined,
-                                color: appcolor.buttonBlue,
+                                color: kBlueColor,
                                 size: width / 12),
                             changer == 3
                                 ? const Text(
                                     'Home',
                                     textScaleFactor: 0.8,
                                     style:
-                                        TextStyle(color: appcolor.buttonBlue),
+                                        TextStyle(color: kBlueColor),
                                   )
                                 : const SizedBox(),
                           ],
@@ -80,14 +80,14 @@ class AppBottomNavBar extends StatelessWidget {
                                 changer == 1
                                     ? Icons.pie_chart
                                     : Icons.pie_chart_outline,
-                                color: appcolor.buttonBlue,
+                                color: kBlueColor,
                                 size: width / 12),
                             changer == 1
                                 ? const Text(
                                     'Statics',
                                     textScaleFactor: 0.8,
                                      style:
-                                        TextStyle(color: appcolor.buttonBlue),
+                                        TextStyle(color: kBlueColor),
                                   )
                                   
                                 : const SizedBox(),
@@ -115,7 +115,7 @@ class AppBottomNavBar extends StatelessWidget {
                                 changer == 2
                                     ? Icons.account_balance_wallet
                                     : Icons.account_balance_wallet_outlined,
-                                color: appcolor.buttonBlue,
+                                color: kBlueColor,
                                 size: width / 12),
                             //  Text(changer==2?'Wallet':'',
                             //   textScaleFactor: 0.8,),
@@ -124,7 +124,7 @@ class AppBottomNavBar extends StatelessWidget {
                                     'Wallet',
                                     textScaleFactor: 0.8,
                                      style:
-                                        TextStyle(color: appcolor.buttonBlue),
+                                        TextStyle(color: kBlueColor),
                                   
                                   )
                                 : const SizedBox()
@@ -146,14 +146,14 @@ class AppBottomNavBar extends StatelessWidget {
                                 changer == 0
                                     ? Icons.receipt_long
                                     : Icons.receipt_long_outlined,
-                                color: appcolor.buttonBlue,
+                                color: kBlueColor,
                                 size: width / 12),
                             changer == 0
                                 ? const Text(
                                     'Bills',
                                     textScaleFactor: 0.8,
                                      style:
-                                        TextStyle(color: appcolor.buttonBlue),
+                                        TextStyle(color: kBlueColor),
                                   
                                   )
                                 : const SizedBox(),

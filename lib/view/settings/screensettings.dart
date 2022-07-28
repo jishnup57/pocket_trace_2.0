@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:one/util/color/app_colors.dart';
 import 'package:one/view/Homepage/home.dart';
 import 'package:one/view/pageSettings/screensettings.dart';
 import 'package:one/view/widget/notificationwidget.dart';
 import 'package:one/view/widget/resetpopup.dart';
 import 'package:share_plus/share_plus.dart';
-//import 'package:rolling_switch/rolling_switch.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:one/color/app_colors.dart' as appcolor;
 
 class SreenSettings extends StatefulWidget {
   const SreenSettings({Key? key}) : super(key: key);
@@ -41,7 +40,7 @@ class _SreenSettingsState extends State<SreenSettings> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: appcolor.buttonBlue,
+        backgroundColor: kBlueColor,
         title: const Text(
           'Settings',
           textScaleFactor: 1.3,
@@ -186,7 +185,7 @@ class _SreenSettingsState extends State<SreenSettings> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Switch(
-                            activeColor: appcolor.buttonBlue,
+                            activeColor:kBlueColor,
                             value: _switchvalue,
                             onChanged: (bool value) {
                               setState(() {

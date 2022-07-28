@@ -1,7 +1,8 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:one/color/app_colors.dart' as appcolor;
+import 'package:one/util/color/app_colors.dart';
+
 import 'package:one/view/widget/popup.dart';
 
 class AppFloatingButton extends StatelessWidget {
@@ -18,7 +19,7 @@ class AppFloatingButton extends StatelessWidget {
             showPopUp(context);
           },
           elevation: 2.0,
-          fillColor: appcolor.buttonBlue,
+          fillColor: kBlueColor,
           child:
            Container(
             width: width/7,

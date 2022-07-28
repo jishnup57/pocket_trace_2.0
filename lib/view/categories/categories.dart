@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:one/Model/category/category_model.dart';
-import 'package:one/color/app_colors.dart' as appcolor;
+import 'package:one/util/color/app_colors.dart';
 import 'package:one/view/categories/expensecategorylist.dart';
 import 'package:one/view/categories/incomecategorylist.dart';
 import 'package:one/view_model/category/category_db.dart';
@@ -58,7 +58,7 @@ class _CategoryScreenState extends State<CategoryScreen>
           padding: EdgeInsets.only(top: height / 15),
           child: const Text('Categories', textScaleFactor: 1.7),
         ),
-        backgroundColor: appcolor.buttonBlue,
+        backgroundColor: kBlueColor,
         centerTitle: true,
       ),
       body: Column(
@@ -104,7 +104,7 @@ class _CategoryScreenState extends State<CategoryScreen>
                         borderRadius: BorderRadius.all(
                           Radius.circular(width / 28),
                         ),
-                        color: appcolor.grayBackground,
+                        color: kGrayColor,
                       ),
                       child: Center(
                         child: Padding(
@@ -154,7 +154,7 @@ class _CategoryScreenState extends State<CategoryScreen>
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16)),
-                          primary: appcolor.buttonBlue,
+                          primary: kBlueColor,
                         ),
                       ),
                     ),
@@ -178,7 +178,7 @@ class _CategoryScreenState extends State<CategoryScreen>
                         borderRadius: BorderRadius.all(
                           Radius.circular(width / 28),
                         ),
-                        color: appcolor.grayBackground,
+                        color: kGrayColor,
                       ),
                       child: Center(
                         child: Padding(
@@ -227,7 +227,7 @@ class _CategoryScreenState extends State<CategoryScreen>
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16)),
-                          primary: appcolor.buttonBlue,
+                          primary: kBlueColor,
                         ),
                       ),
                     ),

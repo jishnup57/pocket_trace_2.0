@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:one/util/color/app_colors.dart';
 import 'package:one/view/pageSettings/screensettings.dart';
-import 'package:one/color/app_colors.dart' as appcolor;
 import 'package:one/view/widget/resetpopup.dart';
 class AppDrawer extends StatelessWidget {
   const AppDrawer({Key? key}) : super(key: key);
@@ -19,7 +19,7 @@ class AppDrawer extends StatelessWidget {
             leading:const Icon(
               Icons.account_circle_outlined,
               size: 30,
-              color: appcolor.buttonBlue,
+              color: kBlueColor,
             ),
             onTap: () {},
           ),
@@ -31,7 +31,7 @@ class AppDrawer extends StatelessWidget {
             leading:const Icon(
               Icons.hourglass_top_rounded,
               size: 30,
-              color: appcolor.buttonBlue,
+              color: kBlueColor,
             ),
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> Settings()));
@@ -45,7 +45,7 @@ class AppDrawer extends StatelessWidget {
             leading:const Icon(
               Icons.account_circle_outlined,
               size: 30,
-              color: appcolor.buttonBlue,
+              color: kBlueColor,
             ),
             onTap: () {
              showDialog(context: context, builder:(ctx){

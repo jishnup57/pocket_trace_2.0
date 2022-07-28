@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:one/Model/category/category_model.dart';
-import 'package:one/color/app_colors.dart' as appcolor;
+import 'package:one/util/color/app_colors.dart';
 import 'package:one/view/Categories/categories.dart';
 import 'package:one/view/widget/snakbar.dart';
 import 'package:one/view_model/category/category_db.dart';
@@ -57,7 +57,7 @@ class _IncomeState extends State<Income> {
           padding: EdgeInsets.only(top: height / 25),
           child: const Text('Income', textScaleFactor: 1.5),
         ),
-        backgroundColor: appcolor.buttonBlue,
+        backgroundColor: kBlueColor,
         centerTitle: true,
       ),
       body: Padding(
@@ -316,7 +316,7 @@ class _IncomeState extends State<Income> {
                             style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(14)),
-                                primary: appcolor.buttonBlue),
+                                primary: kBlueColor),
                           ),
                         )
                       ],

@@ -3,7 +3,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:one/Model/Transaction/transaction_model.dart';
 import 'package:one/Model/category/category_model.dart';
-import 'package:one/color/app_colors.dart' as appcolor;
+import 'package:one/util/color/app_colors.dart';
 import 'package:one/view/screen_edit/edit.dart';
 import 'package:one/view/widget/delete_popup.dart';
 import 'package:one/view/widget/empty_list_show.dart';
@@ -64,7 +64,7 @@ class _AllTransactionsState extends State<AllTransactions> {
           padding: EdgeInsets.only(top: height / 25),
           child: const Text('Transactions', textScaleFactor: 1.5),
         ),
-        backgroundColor: appcolor.buttonBlue,
+        backgroundColor: kBlueColor,
         centerTitle: true,
       ),
       body: Column(
