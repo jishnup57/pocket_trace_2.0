@@ -7,6 +7,7 @@ import 'package:one/view/Categories/categories.dart';
 import 'package:one/view/widget/snakbar.dart';
 import 'package:one/view_model/category/category_db.dart';
 import 'package:one/view_model/transaction/transaction_db.dart';
+import 'package:provider/provider.dart';
 
 import '../../Model/Transaction/transaction_model.dart';
 
@@ -194,9 +195,7 @@ class _IncomeState extends State<Income> {
                                 Radius.circular(12.0),
                               ),
                               color: Colors.white),
-                          child: CategoryDB()
-                                  .listOfIncomeCategoryLisener
-                                  .value
+                          child: context.read<CategoryDB>().allIncomeList
                                   .isNotEmpty
                               ? Padding(
                                   padding: EdgeInsets.all(width / 30),
@@ -211,9 +210,7 @@ class _IncomeState extends State<Income> {
                                       value: categoryId,
                                       icon:
                                           const Icon(Icons.keyboard_arrow_down),
-                                      items: CategoryDB()
-                                          .listOfIncomeCategoryLisener
-                                          .value
+                                      items: context.read<CategoryDB>().allIncomeList
                                           .map((e) {
                                         return DropdownMenuItem(
                                             child: Text(e.name),

@@ -46,6 +46,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => BillDB(),),
+        ChangeNotifierProvider(create: (context) => CategoryDB(),),
       ],
       child: MaterialApp(
         localizationsDelegates: const [

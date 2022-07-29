@@ -5,6 +5,7 @@ import 'package:one/Model/category/category_model.dart';
 import 'package:one/util/color/app_colors.dart';
 import 'package:one/view_model/category/category_db.dart';
 import 'package:one/view_model/transaction/transaction_db.dart';
+import 'package:provider/provider.dart';
 
 
 // ignore: must_be_immutable
@@ -275,14 +276,8 @@ class _EditScreenState extends State<EditScreen> {
                                             ),
                                       items: (_selectedCategorytype ==
                                                   CategoryType.income
-                                              ? CategoryDB
-                                                  .instance
-                                                  .listOfIncomeCategoryLisener
-                                                  .value
-                                              : CategoryDB
-                                                  .instance
-                                                  .listOfExpenseCategoryLisener
-                                                  .value)
+                                              ? context.read<CategoryDB>().allIncomeList
+                                              : context.read<CategoryDB>().allExpenseList)
                                           .map(
                                         (e) {
                                           return DropdownMenuItem(

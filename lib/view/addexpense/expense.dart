@@ -6,6 +6,7 @@ import 'package:one/util/color/app_colors.dart';
 import 'package:one/view/widget/snakbar.dart';
 import 'package:one/view_model/category/category_db.dart';
 import 'package:one/view_model/transaction/transaction_db.dart';
+import 'package:provider/provider.dart';
 
 import '../../Model/category/category_model.dart';
 import '../Categories/categories.dart';
@@ -78,7 +79,6 @@ class _ExpenseState extends State<Expense> {
               children: [
                 Column(
                   children: [
-                    //////////
                     SizedBox(
                       height:height/20,
                     ),
@@ -198,9 +198,7 @@ class _ExpenseState extends State<Expense> {
                                 Radius.circular(12.0),
                               ),
                               color: Colors.white),
-                          child: CategoryDB()
-                                    .listOfExpenseCategoryLisener
-                                    .value.isNotEmpty? Padding(
+                          child: context.read<CategoryDB>().allExpenseList.isNotEmpty? Padding(
                             padding:  EdgeInsets.all(width/30),
                             child:DropdownButtonHideUnderline(
                               child: DropdownButton(
@@ -210,9 +208,7 @@ class _ExpenseState extends State<Expense> {
                                   color: Colors.black54),),
                                 value: categoryId,
                                 icon:const Icon(Icons.keyboard_arrow_down),
-                                items: CategoryDB()
-                                    .listOfExpenseCategoryLisener
-                                    .value
+                                items: context.read<CategoryDB>().allExpenseList
                                     .map((e) {
                                   return DropdownMenuItem(
                                       child: Text(e.name),
@@ -225,7 +221,6 @@ class _ExpenseState extends State<Expense> {
                                   setState(() {
                                     categoryId = selectedValue.toString();
                             
-                                    ///converted to string
                                   });
                                 },
                               ),
