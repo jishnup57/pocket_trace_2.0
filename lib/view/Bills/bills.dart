@@ -3,25 +3,22 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:one/Model/bill/bill_model.dart';
 import 'package:one/util/color/app_colors.dart';
+import 'package:one/util/constants.dart';
+import 'package:one/view/Bills/widget/bill_text_field.dart';
 import 'package:one/view_model/bill/billdb.dart';
+import 'package:provider/provider.dart';
 
 class ScreenBills extends StatefulWidget {
   const ScreenBills({Key? key}) : super(key: key);
 
   @override
   State<ScreenBills> createState() => _ScreenBillsState();
-  
 }
 
 class _ScreenBillsState extends State<ScreenBills> {
   DateTime? _selectedDate;
   final titlecontroller = TextEditingController();
   final amountController = TextEditingController();
-  @override
-  void dispose() {
- 
-    super.dispose();
-  }
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
@@ -46,7 +43,7 @@ class _ScreenBillsState extends State<ScreenBills> {
           padding: EdgeInsets.only(top: height / 25),
           child: const Text('Add Bills', textScaleFactor: 1.5),
         ),
-        backgroundColor:kBlueColor,
+        backgroundColor: kBlueColor,
         centerTitle: true,
       ),
       body: Padding(
@@ -118,81 +115,14 @@ class _ScreenBillsState extends State<ScreenBills> {
               const SizedBox(
                 height: 20,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  const Text(
-                    'Title :',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
-                  ),
-                  Container(
-                     margin:
-                        EdgeInsets.only(right: width / 10, left: width / 12),
-                    height: height / 15,
-                    width: width / 1.9,
-                    decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(12.0),
-                        ),
-                        color: Colors.white),
-                    child: Center(
-                      child: Padding(
-                        padding:  EdgeInsets.only(left:width/30),
-                        child: TextFormField(
-                          controller: titlecontroller,
-                          decoration: const InputDecoration.collapsed(
-                            hintText: 'Enter the Title..',
-                            hintStyle: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                color: Colors.black54),
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
+              BillTextField(
+                  titlecontroller: titlecontroller,
+                  title: 'Title',),
               const SizedBox(
                 height: 20,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  const Text(
-                    'Amount :',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
-                  ),
-                  Container(
-                     margin:
-                        EdgeInsets.only(right: width / 10, left: width / 15),
-                    height: height / 15,
-                    width: width / 1.9,
-                    decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(12.0),
-                        ),
-                        color: Colors.white),
-                    child: Center(
-                      child: Padding(
-                        padding:  EdgeInsets.only(left:width/30),
-                        child: TextFormField(
-                          controller: amountController,
-                          keyboardType: TextInputType.number,
-                          decoration: const InputDecoration.collapsed(
-                            hintText: 'Enter the amount',
-                            hintStyle: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                color: Colors.black54),
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 100,
-              ),
+              BillTextField(titlecontroller: amountController, title: 'Amount',keyType: TextInputType.number),
+              kHight100,
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -201,7 +131,7 @@ class _ScreenBillsState extends State<ScreenBills> {
                     width: width / 2,
                     child: ElevatedButton(
                       onPressed: () {
-                        addbills(context );
+                        addbills(context);
                       },
                       child: const Text(
                         'Submit',
@@ -211,7 +141,7 @@ class _ScreenBillsState extends State<ScreenBills> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(14),
                           ),
-                          primary:kBlueColor),
+                          primary: kBlueColor),
                     ),
                   )
                 ],
@@ -235,22 +165,25 @@ class _ScreenBillsState extends State<ScreenBills> {
     if (_selectedDate == null) {
       return;
     }
-    
+
     final _model = BillModel(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       title: _title,
       date: _selectedDate!,
       amound: _amount,
     );
-    BillDB.instance.insertbill(_model);
-    ScaffoldMessenger.of(ctx).showSnackBar(const SnackBar(
-          
-          behavior: SnackBarBehavior.floating,
-          margin: EdgeInsets.all(10),
-          backgroundColor: Colors.black,
-          content: Text('Bill added successfully...'),),);
-      titlecontroller.clear();
-      amountController.clear();
-      _selectedDate == null;
+    context.read<BillDB>().insertbill(_model);
+    ScaffoldMessenger.of(ctx).showSnackBar(
+      const SnackBar(
+        behavior: SnackBarBehavior.floating,
+        margin: EdgeInsets.all(10),
+        backgroundColor: Colors.black,
+        content: Text('Bill added successfully...'),
+      ),
+    );
+    titlecontroller.clear();
+    amountController.clear();
+    _selectedDate == null;
   }
 }
+

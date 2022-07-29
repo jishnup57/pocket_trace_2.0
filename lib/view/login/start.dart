@@ -1,8 +1,8 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:one/main.dart';
 import 'package:one/util/color/app_colors.dart';
+import 'package:one/util/constants.dart';
 import 'package:one/view/Homepage/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 String username='';

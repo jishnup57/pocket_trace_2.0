@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:one/main.dart';
+import 'package:one/util/constants.dart';
 import 'package:one/view/Homepage/home.dart';
 import 'package:one/view/login/start.dart';
 import 'package:shared_preferences/shared_preferences.dart';

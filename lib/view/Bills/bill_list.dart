@@ -3,41 +3,36 @@ import 'package:intl/intl.dart';
 import 'package:one/Model/bill/bill_model.dart';
 import 'package:one/util/color/app_colors.dart';
 import 'package:one/view_model/bill/billdb.dart';
-class ShowBill extends StatefulWidget {
+import 'package:provider/provider.dart';
+
+class ShowBill extends StatelessWidget {
   const ShowBill({Key? key}) : super(key: key);
 
   @override
-  State<ShowBill> createState() => _ShowBillState();
-}
-
-class _ShowBillState extends State<ShowBill> {
-  @override
   Widget build(BuildContext context) {
-    BillDB().refreshBillUI();
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Reminder',
-          textScaleFactor: 1.2,
-        ),
-        backgroundColor: kBlueColor,
-        centerTitle: true,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            bottom: Radius.elliptical(15, 15),
+        appBar: AppBar(
+          title: const Text(
+            'Reminder',
+            textScaleFactor: 1.2,
+          ),
+          backgroundColor: kBlueColor,
+          centerTitle: true,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.elliptical(15, 15),
+            ),
           ),
         ),
-      ),
-      body: Padding(
+        body: Padding(
           padding: const EdgeInsets.all(10),
-          child: ValueListenableBuilder(
-            valueListenable: BillDB.instance.billListLisener,
-            builder: (BuildContext ctx, List<BillModel> newList, Widget? _) {
+          child: Consumer<BillDB>(
+            builder: (context, value, _) {
               return ListView.separated(
                 itemBuilder: (BuildContext context, int index) {
-                  final _value = newList[index];
+                  final _value = value.allBillList[index];
                   return Container(
                     height: height / 3.5,
                     width: double.infinity,
@@ -49,28 +44,7 @@ class _ShowBillState extends State<ShowBill> {
                     ),
                     child: Column(
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            SizedBox(
-                              width: width / 10,
-                              height: width / 10,
-                              child: ColoredBox(
-                                color: Colors.red,
-                                child: IconButton(
-                                  onPressed: () {
-                                    BillDB.instance.deleteBill(_value.id);
-                                  },
-                                  color: Colors.white,
-                                  icon: Icon(
-                                    Icons.close,
-                                    size: width / 20,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        BillDeleteButton(width: width, value: _value),
                         Expanded(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -98,10 +72,49 @@ class _ShowBillState extends State<ShowBill> {
                     const SizedBox(
                   height: 10,
                 ),
-                itemCount: newList.length,
+                itemCount: value.allBillList.length,
               );
             },
-          )),
+          ),
+        ));
+  }
+}
+
+class BillDeleteButton extends StatelessWidget {
+  const BillDeleteButton({
+    Key? key,
+    required this.width,
+    required BillModel value,
+  })  : _value = value,
+        super(key: key);
+
+  final double width;
+  final BillModel _value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        SizedBox(
+          width: width / 10,
+          height: width / 10,
+          child: ColoredBox(
+            color: Colors.red,
+            child: IconButton(
+              onPressed: () {
+                Provider.of<BillDB>(context, listen: false)
+                    .deleteBill(_value.id);
+              },
+              color: Colors.white,
+              icon: Icon(
+                Icons.close,
+                size: width / 20,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

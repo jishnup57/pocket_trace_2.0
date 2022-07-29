@@ -6,30 +6,28 @@ import 'package:one/Model/Transaction/transaction_model.dart';
 import 'package:one/Model/bill/bill_model.dart';
 import 'package:one/Model/category/category_model.dart';
 import 'package:one/view/splashscreen/splash.dart';
+import 'package:one/view_model/bill/billdb.dart';
+import 'package:provider/provider.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:flutter/services.dart';
 
 import 'view_model/category/category_db.dart';
 
-
-const loginKey='UserLogedIn';
-
-
-void main() async{
+void main() async {
   tz.initializeTimeZones();
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   await Hive.initFlutter();
-    if(!Hive.isAdapterRegistered(CategoryTypeAdapter().typeId)){
+  if (!Hive.isAdapterRegistered(CategoryTypeAdapter().typeId)) {
     Hive.registerAdapter(CategoryTypeAdapter());
   }
-  if(!Hive.isAdapterRegistered(CategoryModelAdapter().typeId)){
+  if (!Hive.isAdapterRegistered(CategoryModelAdapter().typeId)) {
     Hive.registerAdapter(CategoryModelAdapter());
   }
-  if(!Hive.isAdapterRegistered(TransationModelAdapter().typeId)){
+  if (!Hive.isAdapterRegistered(TransationModelAdapter().typeId)) {
     Hive.registerAdapter(TransationModelAdapter());
   }
-  if(!Hive.isAdapterRegistered(BillModelAdapter().typeId)){
+  if (!Hive.isAdapterRegistered(BillModelAdapter().typeId)) {
     Hive.registerAdapter(BillModelAdapter());
   }
   CategoryDB().refreshUI();
@@ -43,21 +41,23 @@ void main() async{
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp(
-      localizationsDelegates:const [
-        GlobalWidgetsLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        MonthYearPickerLocalizations.delegate
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => BillDB(),),
       ],
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(fontFamily: 'Schyler'),
-     home:const SplashScreen(),
-  
-   
+      child: MaterialApp(
+        localizationsDelegates: const [
+          GlobalWidgetsLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          MonthYearPickerLocalizations.delegate
+        ],
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Demo',
+        theme: ThemeData(fontFamily: 'Schyler'),
+        home: const SplashScreen(),
+      ),
     );
   }
 }

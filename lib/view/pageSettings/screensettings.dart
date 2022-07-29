@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:one/db/category/CircularProgress/functions/functions.dart';
 import 'package:one/util/color/app_colors.dart';
+import 'package:one/view_model/category/CircularProgress/functions/functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -121,7 +121,7 @@ class Settings extends StatelessWidget {
     }
     final sharedpre=await SharedPreferences.getInstance();
     await sharedpre.setDouble('Dialylimit',convertedSetAmound);
-    Functions().getSetamount();
+    Functions.instance.getSetamount();
     Navigator.of(context).pop();
   }
     
