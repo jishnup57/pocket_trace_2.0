@@ -7,6 +7,7 @@ const loginKey = 'UserLogedIn';
 
 const billdbname = 'bill_database';
 const categorydbname='category_database';
+const transactiondbname = 'transaction_db';
 
 //sized Box
 

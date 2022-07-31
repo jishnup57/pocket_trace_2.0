@@ -1,0 +1,336 @@
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:one/Model/Transaction/transaction_model.dart';
+import 'package:one/util/color/app_colors.dart';
+import 'package:one/view/widget/empty_list_show.dart';
+import 'package:month_year_picker/month_year_picker.dart';
+import 'package:one/view/widget/main_slidable_card.dart';
+import 'package:one/view_model/rebuild/rebuild.dart';
+import 'package:one/view_model/transaction/transaction_db.dart';
+import 'package:provider/provider.dart';
+
+class AllTransactions extends StatefulWidget {
+  const AllTransactions({Key? key}) : super(key: key);
+
+  @override
+  State<AllTransactions> createState() => _AllTransactionsState();
+}
+
+//ValueNotifier<bool> visibleMonth = ValueNotifier(false);
+DateTime selectedMonth = DateTime.now();
+
+class _AllTransactionsState extends State<AllTransactions> {
+  ValueNotifier<List<TransationModel>> selectedlist =
+      TransactionDB.instance.transactionListNotifier;
+  
+ 
+  DateTime? _selectedCustomDateFirst;
+  DateTime? _selectedCustomDateLast;
+
+  @override
+  void initState() {
+    TransactionDB.instance.filtration(selectedlist.value);
+    updateData();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final double height = MediaQuery.of(context).size.height;
+
+    return Scaffold(
+      appBar: AppBar(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+          bottom: Radius.elliptical(25, 25),
+        )),
+        leading: Padding(
+          padding: const EdgeInsets.only(bottom: 60),
+          child: InkWell(
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+              child: const Icon(Icons.arrow_back)),
+        ),
+        toolbarHeight: height/8,
+        title: Padding(
+          padding: EdgeInsets.only(top: height / 25),
+          child: const Text('Transactions', textScaleFactor: 1.5),
+        ),
+        backgroundColor: kBlueColor,
+        centerTitle: true,
+      ),
+      body: Column(
+        children: [
+          Consumer<Rebuild>(builder: (context, value, _) => 
+           Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ChoiceChip(
+                  label: Text(
+                    '    All..   ',
+                    style: TextStyle(
+                      color: (value.choice == 'All') ? Colors.white : Colors.black,
+                    ),
+                  ),
+                  selectedColor: Colors.black,
+                  selected:value. choice == 'All' ? true : false,
+                  onSelected: (bool value) {
+                    context.read<Rebuild>().choiceChipRebuild('All',TransactionDB.instance.transactionListNotifier,context );
+                   // TransactionDB.instance.filtration(selectedlist.value);
+                     updateData();
+                    // setState(() {
+                    //   choice = 'All';
+                    //   selectedlist =
+                    //       TransactionDB.instance.transactionListNotifier;
+                    //   TransactionDB.instance.filtration(selectedlist.value);
+                    //   updateData();
+                    // });
+                  },
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                ChoiceChip(
+                  label: Text(
+                    'Income',
+                    style: TextStyle(
+                      color: (value.choice == 'Income') ? Colors.white : Colors.black,
+                    ),
+                  ),
+                  selectedColor: Colors.green,
+                  selected: value.choice == 'Income' ? true : false,
+                  onSelected: (bool value) {
+                    context.read<Rebuild>().choiceChipRebuild('Income',TransactionDB.instance.incomListNotifier,context);
+                    
+                     updateData();
+                    // setState(() {
+                    //   choice = 'Income';
+                    //   selectedlist = TransactionDB.instance.incomListNotifier;
+                    //   TransactionDB.instance.filtration(selectedlist.value);
+                    //   updateData();
+                    // });
+                  },
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                ChoiceChip(
+                  label: Text(
+                    'Expense',
+                    style: TextStyle(
+                      color: (value.choice == 'Expense') ? Colors.white : Colors.black,
+                    ),
+                  ),
+                  selectedColor: Colors.red,
+                  selected:value. choice == 'Expense' ? true : false,
+                  onSelected: (bool value) {
+                    context.read<Rebuild>().choiceChipRebuild('Expense',TransactionDB.instance.expenceListNotifier,context);
+                    
+                     updateData();
+                    // setState(() {
+                    //   choice = 'Expense';
+                    //   selectedlist = TransactionDB.instance.expenceListNotifier;
+                    //   TransactionDB.instance.filtration(selectedlist.value);
+                    //   updateData();
+                    // });
+                  },
+                )
+              ],
+            ),
+          ),
+          Consumer<Rebuild>(builder: (context, value, __) => 
+             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                DropdownButton<String>(
+                  value:value.dropdownName ,
+                  items: value.dropitems.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    value.dropButtonChanger(newValue);
+                  },
+                ),
+                Consumer<Rebuild>(
+                  builder: (context, value, _) => 
+                  Visibility(
+                    visible: value.dropdownName == 'Monthly' ? true : false,
+                    child: TextButton(
+                        onPressed: () {
+                          pickDate();
+                        },
+                        child: Text(DateFormat('MMMM').format(selectedMonth))),
+                  ),
+                )
+              ],
+            ),
+          ),
+          Consumer<Rebuild>(
+            builder: (context, value, _) => 
+             Visibility(
+              visible: value.dropdownName == 'Custom' ? true : false,
+              child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                TextButton.icon(
+                  onPressed: () async {
+                    final _tempdate = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate:
+                          DateTime.now().subtract(const Duration(days: 365 * 5)),
+                      lastDate: DateTime.now(),
+                    );
+                    if (_tempdate == null) {
+                      return;
+                    } else {
+                      setState(() {
+                        _selectedCustomDateFirst = _tempdate;
+                      });
+                      if (_selectedCustomDateFirst != null &&
+                          _selectedCustomDateLast != null) {
+                        TransactionDB.instance.customFiltration(
+                            selectedlist: selectedlist.value,
+                            firstDate: _selectedCustomDateFirst!,
+                            lastDate: _selectedCustomDateLast!);
+                      }
+                    }
+                  },
+                  icon: const Icon(Icons.calendar_month),
+                  label: Text(_selectedCustomDateFirst == null
+                      ? 'First date'
+                      : DateFormat('yMMMd').format(_selectedCustomDateFirst!)),
+                ),
+                const Icon(Icons.sync_alt),
+                TextButton.icon(
+                  onPressed: () async {
+                    final _tempdate = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: _selectedCustomDateFirst ?? DateTime.now(),
+                      lastDate: DateTime.now(),
+                    );
+                    if (_tempdate == null) {
+                      return;
+                    } else {
+                      setState(() {
+                        _selectedCustomDateLast = _tempdate;
+                      });
+                    }
+                  },
+                  icon: const Icon(Icons.calendar_month),
+                  label: Text(_selectedCustomDateLast == null
+                      ? 'Last date'
+                      : DateFormat('yMMMd').format(_selectedCustomDateLast!)),
+                ),
+              ]),
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child:Consumer<Rebuild>(builder: (context, value, _) {
+                return  selectedlist.value.isEmpty
+                      ? Column(
+                        children: [
+                          SizedBox(height: height/9,),
+                          emptyListBackground(context),
+                        ],
+                      )
+                      : ListView.separated(
+                          shrinkWrap: true,
+                          itemCount: value.filterData.length,
+                          separatorBuilder: (BuildContext context, int index) =>
+                              const SizedBox(
+                            height: 10,
+                          ),
+                          itemBuilder: (BuildContext context, int index) {
+                            final _value = value.filterData[index];
+                            return MainSlidableCard(value: _value);
+                          },
+                        );
+              },),
+              //  ValueListenableBuilder(
+              //   valueListenable: valueChecking(context),
+              //   builder: (BuildContext ctx, List<TransationModel> newList,
+              //       Widget? _) {
+              //     return selectedlist.value.isEmpty
+              //         ? Column(
+              //           children: [
+              //             SizedBox(height: height/9,),
+              //             emptyListBackground(context),
+              //           ],
+              //         )
+              //         : ListView.separated(
+              //             shrinkWrap: true,
+              //             itemCount: newList.length,
+              //             separatorBuilder: (BuildContext context, int index) =>
+              //                 const SizedBox(
+              //               height: 10,
+              //             ),
+              //             itemBuilder: (BuildContext context, int index) {
+              //               final _value = newList[index];
+              //               return MainSlidableCard(value: _value);
+              //             },
+              //           );
+              //   },
+              // )
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+ 
+
+  // ValueNotifier<List<TransationModel>> valueChecking(context) {
+  //   // visibleMonth.value=false;
+  //   //'All','Today','Yesterday','Monthly','Yearly'
+  //   // visibleMonth.value = false;
+  //   if (dropDownValue == 'Today') {
+  //     return TransactionDB.instance.todayListNotifier;
+  //   }
+  //   if (dropDownValue == 'Yesterday') {
+  //     return TransactionDB.instance.yesterdayListNotifier;
+  //   }
+  //   if (dropDownValue == 'Monthly') {
+  //     // visibleMonth.value = true;
+  //     return TransactionDB.instance.monthelyListNotifier;
+  //   }
+  //   if (dropDownValue == 'Custom') {
+  //     TransactionDB.instance.customFiltration(selectedlist: selectedlist.value, firstDate: _selectedCustomDateFirst??DateTime.now(), lastDate:_selectedCustomDateLast??DateTime.now());
+  //     return TransactionDB.instance.customListNotifier;
+  //   }
+
+
+  //   return selectedlist;
+  // }
+
+  pickDate() async {
+    final selected = await showMonthYearPicker(
+      context: context,
+      initialDate: selectedMonth,
+      firstDate:DateTime(2020) ,
+      lastDate:DateTime.now() ,
+    );
+    setState(() {
+      selectedMonth = selected ?? DateTime.now();
+    });
+    TransactionDB.instance.monthelyListNotifier.value.clear();
+    updateData();
+    // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
+    TransactionDB.instance.monthelyListNotifier.notifyListeners();
+  }
+
+  updateData() async {
+    Future.forEach(selectedlist.value, (TransationModel model) {
+      if (model.date.month == selectedMonth.month &&
+          model.date.year == selectedMonth.year) {
+        TransactionDB.instance.monthelyListNotifier.value.add(model);
+      }
+    });
+  }
+}

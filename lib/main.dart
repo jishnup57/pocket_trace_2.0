@@ -6,7 +6,9 @@ import 'package:one/Model/Transaction/transaction_model.dart';
 import 'package:one/Model/bill/bill_model.dart';
 import 'package:one/Model/category/category_model.dart';
 import 'package:one/view/splashscreen/splash.dart';
+import 'package:one/view_model/all_transactions/controller_All_trans.dart';
 import 'package:one/view_model/bill/billdb.dart';
+import 'package:one/view_model/transaction/transaction_db.dart';
 import 'package:provider/provider.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:flutter/services.dart';
@@ -47,6 +49,8 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => BillDB(),),
         ChangeNotifierProvider(create: (context) => CategoryDB(),),
+        ChangeNotifierProvider(create: (context) => TransactionDB(),),
+        ChangeNotifierProvider(create: (context) => AllTransCtrl(),)
       ],
       child: MaterialApp(
         localizationsDelegates: const [

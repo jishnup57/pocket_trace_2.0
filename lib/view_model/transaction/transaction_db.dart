@@ -7,15 +7,15 @@ import 'package:one/util/constants.dart';
 import 'package:one/view_model/category/category_db.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-const transactiondbname = 'transaction_db';
-
 abstract class TransactionFunctions {
   Future<void> addTransactions(TransationModel object);
   Future<List<TransationModel>> getAllTransactions();
   Future<void> deleteTransaction(String id);
+  Future<void> updateTransactionToDB(TransationModel model, String id);
+  Future<void> resetTransactrion();
 }
 
-class TransactionDB extends TransactionFunctions {
+class TransactionDB extends TransactionFunctions with ChangeNotifier{
   TransactionDB._internal();
 
   static TransactionDB instance = TransactionDB._internal();
@@ -23,17 +23,32 @@ class TransactionDB extends TransactionFunctions {
   factory TransactionDB() {
     return instance;
   }
+
+  double totalIncome = 0;
+  double totalExpense = 0;
+  double todayExpense = 0;
+
   ValueNotifier<List<TransationModel>> transactionListNotifier =
       ValueNotifier([]);
+      List<TransationModel> allTransactionsList=[];
   ValueNotifier<List<TransationModel>> incomListNotifier = ValueNotifier([]);
+      List<TransationModel> allIncomeList=[];
   ValueNotifier<List<TransationModel>> expenceListNotifier = ValueNotifier([]);
+    List<TransationModel> allExpenceList=[];
   ValueNotifier<double> todayExpenseNotifier = ValueNotifier(0);
+      double todayTotalExpenceolnly=0;
   //day list notifiers
+  //
+  //
   ValueNotifier<List<TransationModel>> todayListNotifier = ValueNotifier([]);
+    List<TransationModel> todayAllList=[];
   ValueNotifier<List<TransationModel>> yesterdayListNotifier =
       ValueNotifier([]);
+      List<TransationModel> yesterdayAllList=[];
   ValueNotifier<List<TransationModel>> monthelyListNotifier = ValueNotifier([]);
-   ValueNotifier<List<TransationModel>> customListNotifier = ValueNotifier([]);
+      List<TransationModel> monthlyAllList=[];
+  ValueNotifier<List<TransationModel>> customListNotifier = ValueNotifier([]);
+        List<TransationModel> customAllList=[];
   //Global date assign
   String todayDate = DateFormat.yMd().format(DateTime.now());
   String yesterdayDate =
@@ -50,15 +65,14 @@ class TransactionDB extends TransactionFunctions {
     refresh();
   }
 
-  double totalIncome = 0;
-  double totalExpense = 0;
-  double todayExpense = 0;
   Future<void> refresh() async {
     var _list = await getAllTransactions();
     transactionListNotifier.value.clear();
+    allTransactionsList.clear();
     _list = _list.reversed.toList();
     _list.sort((first, second) => second.date.compareTo(first.date));
     transactionListNotifier.value.addAll(_list);
+    allTransactionsList.addAll(_list);
     // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
     transactionListNotifier.notifyListeners();
 
@@ -66,22 +80,28 @@ class TransactionDB extends TransactionFunctions {
     totalExpense = 0;
     todayExpense = 0;
     todayExpenseNotifier.value = 0;
+    todayTotalExpenceolnly=0;
     incomListNotifier.value.clear();
+    allIncomeList.clear();
     expenceListNotifier.value.clear();
+    allExpenceList.clear();
     DateTime dateToday = DateTime.now();
 
     String newDate = DateFormat('yMd').format(dateToday);
     for (var element in _list) {
       if (element.type == CategoryType.income) {
         incomListNotifier.value.add(element);
+        allIncomeList.add(element);
         totalIncome = totalIncome + element.amound;
       } else {
         expenceListNotifier.value.add(element);
+        allExpenceList.add(element);
         totalExpense = totalExpense + element.amound;
         String dat = DateFormat('yMd').format(element.date);
         if (dat == newDate) {
           todayExpense = todayExpense + element.amound;
           todayExpenseNotifier.value = todayExpense;
+          todayTotalExpenceolnly=todayExpense;
         }
       }
     }
@@ -91,6 +111,7 @@ class TransactionDB extends TransactionFunctions {
     expenceListNotifier.notifyListeners();
     // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
     todayExpenseNotifier.notifyListeners();
+    notifyListeners();
   }
 
   @override
@@ -108,12 +129,14 @@ class TransactionDB extends TransactionFunctions {
     refresh();
   }
 
+  @override
   Future<void> updateTransactionToDB(TransationModel model, String id) async {
     final transactionBox =
         await Hive.openBox<TransationModel>(transactiondbname);
     transactionBox.put(id, model);
   }
 
+  @override
   Future<void> resetTransactrion() async {
     final transactionBox =
         await Hive.openBox<TransationModel>(transactiondbname);
@@ -125,45 +148,58 @@ class TransactionDB extends TransactionFunctions {
     await refresh();
     await CategoryDB.instance.refreshUI();
   }
-  Future<void>filtration(List<TransationModel> selectedlist)async{
-   //var _list =await getAllTransactions();
+
+  Future<void> filtration(List<TransationModel> selectedlist) async {
+    //var _list =await getAllTransactions();
     todayListNotifier.value.clear();
-   yesterdayListNotifier.value.clear();
-   monthelyListNotifier.value.clear();
-  await Future.forEach(selectedlist, (TransationModel singleModel){
-     String eachModelDate=DateFormat.yMd().format(singleModel.date);
-  
-     if (todayDate==eachModelDate) {
-       todayListNotifier.value.add(singleModel);
-     }
-     if (yesterdayDate==eachModelDate) {
-       yesterdayListNotifier.value.add(singleModel);
-     }
-    //  if (MonthlyDate==eachModelDate) {
-    //    monthelyListNotifier.value.add(singleModel);
-    //  }
+    todayAllList.clear();
+    yesterdayListNotifier.value.clear();
+    yesterdayAllList.clear();
+    monthelyListNotifier.value.clear();
+    monthlyAllList.clear();
+    await Future.forEach(selectedlist, (TransationModel singleModel) {
+      String eachModelDate = DateFormat.yMd().format(singleModel.date);
 
-   });
-       // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
-   todayListNotifier.notifyListeners();
-      // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
-   yesterdayListNotifier.notifyListeners();
-      // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
-   monthelyListNotifier.notifyListeners();
-  }
- Future<void> customFiltration({required List<TransationModel> selectedlist,required DateTime firstDate,required DateTime lastDate})async{
-  customListNotifier.value.clear();
-  int first=int.parse(DateFormat('yyyyMMdd').format(firstDate)) ;
-  int last=int.parse(DateFormat('yyyyMMdd').format(lastDate));
-  
-   await Future.forEach(selectedlist, (TransationModel singleModel){
-     int modelDate=int.parse(DateFormat('yyyyMMdd').format(singleModel.date));
-
-      if (modelDate>=first&&modelDate<=last) {
-        customListNotifier.value.add(singleModel);
+      if (todayDate == eachModelDate) {
+        todayListNotifier.value.add(singleModel);
+        todayAllList.add(singleModel);
       }
-   });
-   // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
-   customListNotifier.notifyListeners();
+      if (yesterdayDate == eachModelDate) {
+        yesterdayListNotifier.value.add(singleModel);
+        yesterdayAllList.add(singleModel);
+      }
+      //  if (MonthlyDate==eachModelDate) {
+      //    monthelyListNotifier.value.add(singleModel);
+      //  }
+    });
+    // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
+    todayListNotifier.notifyListeners();
+    // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
+    yesterdayListNotifier.notifyListeners();
+    // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
+    monthelyListNotifier.notifyListeners();
+    notifyListeners();
+  }
+
+  Future<void> customFiltration(
+      {required List<TransationModel> selectedlist,
+      required DateTime firstDate,
+      required DateTime lastDate}) async {
+    customListNotifier.value.clear();
+    int first = int.parse(DateFormat('yyyyMMdd').format(firstDate));
+    int last = int.parse(DateFormat('yyyyMMdd').format(lastDate));
+
+    await Future.forEach(selectedlist, (TransationModel singleModel) {
+      int modelDate =
+          int.parse(DateFormat('yyyyMMdd').format(singleModel.date));
+
+      if (modelDate >= first && modelDate <= last) {
+        customListNotifier.value.add(singleModel);
+        customAllList.add(singleModel);
+      }
+    });
+    // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
+    customListNotifier.notifyListeners();
+    notifyListeners();
   }
 }

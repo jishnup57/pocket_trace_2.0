@@ -355,7 +355,8 @@ class _ExpenseState extends State<Expense> {
       notes: _notes,
       id: DateTime.now().millisecondsSinceEpoch.toString(),
     );
-    TransactionDB.instance.addTransactions(_model);
+    context.read<TransactionDB>().addTransactions(_model);
     Navigator.of(context).pop();
+
   }
 }
