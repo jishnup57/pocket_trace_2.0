@@ -5,12 +5,12 @@ import 'package:one/Model/category/category_model.dart';
 import 'package:one/util/color/app_colors.dart';
 import 'package:one/view/Categories/categories.dart';
 import 'package:one/view/widget/snakbar.dart';
+import 'package:one/view_model/addTrans/add_transaction.dart';
 import 'package:one/view_model/category/category_db.dart';
 import 'package:one/view_model/transaction/transaction_db.dart';
 import 'package:provider/provider.dart';
 
 import '../../Model/Transaction/transaction_model.dart';
-
 
 class Income extends StatefulWidget {
   const Income({Key? key}) : super(key: key);
@@ -42,6 +42,7 @@ class _IncomeState extends State<Income> {
           padding: const EdgeInsets.only(bottom: 60),
           child: InkWell(
               onTap: () {
+                context.read<AddTrans>().dropdownName = null;
                 Navigator.of(context).pop();
               },
               child: const Icon(Icons.arrow_back)),
@@ -78,7 +79,7 @@ class _IncomeState extends State<Income> {
                 Column(
                   children: [
                     SizedBox(
-                      height:height/20,
+                      height: height / 20,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -99,41 +100,32 @@ class _IncomeState extends State<Income> {
                               Radius.circular(12.0),
                             ),
                           ),
-                          child: TextButton.icon(
-                            onPressed: () async {
-                              final _selectedDateTemp = await showDatePicker(
-                                  context: context,
-                                  initialDate: DateTime.now(),
-                                  firstDate: DateTime.now()
-                                      .subtract(const Duration(days: 30 * 6)),
-                                  lastDate: DateTime.now());
-                              if (_selectedDateTemp == null) {
-                                return;
-                              } else {
-                                setState(() {
-                                  _selectedDate = _selectedDateTemp;
-                                });
-                              }
-                            },
-                            icon: Icon(
-                              Icons.calendar_month,
-                              size: height / 25,
-                              color: Colors.black54,
+                          child: Consumer<AddTrans>(
+                            builder: (context, value, _) => TextButton.icon(
+                              onPressed: () async {
+                                value.pickDate(context);
+                                _selectedDate = value.date;
+                              },
+                              icon: Icon(
+                                Icons.calendar_month,
+                                size: height / 25,
+                                color: Colors.black54,
+                              ),
+                              label: Text(
+                                  // ignore: unnecessary_null_comparison
+                                  _selectedDate == null
+                                      ? 'Select Date'
+                                      : DateFormat('MMMMd').format(value.date),
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.black54)),
                             ),
-                            label: Text(
-                                // ignore: unnecessary_null_comparison
-                                _selectedDate == null
-                                    ? 'Select Date'
-                                    : DateFormat('MMMMd').format(_selectedDate),
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.black54)),
                           ),
                         ),
                       ],
                     ),
-                     SizedBox(
-                      height: height/20,
+                    SizedBox(
+                      height: height / 20,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -175,7 +167,7 @@ class _IncomeState extends State<Income> {
                       ],
                     ),
                     SizedBox(
-                      height:height/20,
+                      height: height / 20,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -195,39 +187,43 @@ class _IncomeState extends State<Income> {
                                 Radius.circular(12.0),
                               ),
                               color: Colors.white),
-                          child: context.read<CategoryDB>().allIncomeList
+                          child: context
+                                  .read<CategoryDB>()
+                                  .allIncomeList
                                   .isNotEmpty
                               ? Padding(
                                   padding: EdgeInsets.all(width / 30),
-                                  child: DropdownButtonHideUnderline(
-                                    child: DropdownButton(
-                                      hint: const Text(
-                                        'select Category',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w700,
-                                            color: Colors.black54),
+                                  child: Consumer<AddTrans>(
+                                    builder: (context, value, _) =>
+                                        DropdownButtonHideUnderline(
+                                      child: DropdownButton(
+                                        hint: const Text(
+                                          'select Category',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w700,
+                                              color: Colors.black54),
+                                        ),
+                                        value: value.dropdownName,
+                                        icon: const Icon(
+                                            Icons.keyboard_arrow_down),
+                                        items: context
+                                            .read<CategoryDB>()
+                                            .allIncomeList
+                                            .map((e) {
+                                          return DropdownMenuItem(
+                                              child: Text(e.name),
+                                              value: e.id,
+                                              onTap: () {
+                                                // print(e);
+                                                _selectedCategoryModel = e;
+                                              });
+                                        }).toList(),
+                                        onChanged: (selectedValue) {
+                                          //  print(selectedValue);
+                                          value.dropdownButtonRebuild(
+                                              selectedValue);
+                                        },
                                       ),
-                                      value: categoryId,
-                                      icon:
-                                          const Icon(Icons.keyboard_arrow_down),
-                                      items: context.read<CategoryDB>().allIncomeList
-                                          .map((e) {
-                                        return DropdownMenuItem(
-                                            child: Text(e.name),
-                                            value: e.id,
-                                            onTap: () {
-                                              // print(e);
-                                              _selectedCategoryModel = e;
-                                            });
-                                      }).toList(),
-                                      onChanged: (selectedValue) {
-                                        //  print(selectedValue);
-                                        setState(() {
-                                          categoryId = selectedValue.toString();
-
-                                          ///converted to string
-                                        });
-                                      },
                                     ),
                                   ),
                                 )
@@ -253,8 +249,8 @@ class _IncomeState extends State<Income> {
                         ),
                       ],
                     ),
-                   SizedBox(
-                      height:height/20,
+                    SizedBox(
+                      height: height / 20,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -331,9 +327,7 @@ class _IncomeState extends State<Income> {
   Future<void> addTransaction(BuildContext context) async {
     final _notes = _notesEditingController.text.trim();
     final _amound = _amoundEditingController.text.trim();
-    // if (_notes.isEmpty) {
-    //   return;
-    // }
+    categoryId = context.read<AddTrans>().dropdownName;
     if (_amound.isEmpty) {
       snakBarShow(context);
       return;
@@ -342,10 +336,7 @@ class _IncomeState extends State<Income> {
       snakBarShow(context);
       return;
     }
-    // ignore: unnecessary_null_comparison
-    if (_selectedDate == null) {
-      return;
-    }
+
     final convertedAmound = double.tryParse(_amound);
     if (convertedAmound == null) {
       return;
@@ -363,6 +354,8 @@ class _IncomeState extends State<Income> {
       id: DateTime.now().millisecondsSinceEpoch.toString(),
     );
     context.read<TransactionDB>().addTransactions(_model);
+    context.read<AddTrans>().dropdownName = null;
+    context.read<AddTrans>().date = DateTime.now();
     Navigator.of(context).pop();
   }
 }

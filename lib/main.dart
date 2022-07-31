@@ -6,13 +6,14 @@ import 'package:one/Model/Transaction/transaction_model.dart';
 import 'package:one/Model/bill/bill_model.dart';
 import 'package:one/Model/category/category_model.dart';
 import 'package:one/view/splashscreen/splash.dart';
-import 'package:one/view_model/all_transactions/controller_All_trans.dart';
+import 'package:one/view_model/addTrans/add_transaction.dart';
+import 'package:one/view_model/all_transactions/controller_all_trans.dart';
 import 'package:one/view_model/bill/billdb.dart';
+import 'package:one/view_model/home/home_routes.dart';
 import 'package:one/view_model/transaction/transaction_db.dart';
 import 'package:provider/provider.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:flutter/services.dart';
-
 import 'view_model/category/category_db.dart';
 
 void main() async {
@@ -50,7 +51,10 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => BillDB(),),
         ChangeNotifierProvider(create: (context) => CategoryDB(),),
         ChangeNotifierProvider(create: (context) => TransactionDB(),),
-        ChangeNotifierProvider(create: (context) => AllTransCtrl(),)
+        ChangeNotifierProvider(create: (context) => AllTransCtrl(),),
+        ChangeNotifierProvider(create: (context) => HomeRoutes(),),
+         ChangeNotifierProvider(create: (context) => AddTrans(),),
+
       ],
       child: MaterialApp(
         localizationsDelegates: const [

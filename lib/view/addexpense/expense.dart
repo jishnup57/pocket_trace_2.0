@@ -1,9 +1,12 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:one/Model/Transaction/transaction_model.dart';
 import 'package:one/util/color/app_colors.dart';
 import 'package:one/view/widget/snakbar.dart';
+import 'package:one/view_model/addTrans/add_transaction.dart';
 import 'package:one/view_model/category/category_db.dart';
 import 'package:one/view_model/transaction/transaction_db.dart';
 import 'package:provider/provider.dart';
@@ -11,15 +14,10 @@ import 'package:provider/provider.dart';
 import '../../Model/category/category_model.dart';
 import '../Categories/categories.dart';
 
-class Expense extends StatefulWidget {
-  const Expense({Key? key}) : super(key: key);
-
-  @override
-  State<Expense> createState() => _ExpenseState();
-}
-
-class _ExpenseState extends State<Expense> {
-  DateTime _selectedDate=DateTime.now();
+// ignore: must_be_immutable
+class Expense extends StatelessWidget {
+   Expense({Key? key}) : super(key: key);
+   DateTime _selectedDate = DateTime.now();
   final CategoryType? _selectedCategoryType = CategoryType.expense;
   CategoryModel? _selectedCategoryModel;
   String? categoryId;
@@ -41,6 +39,7 @@ class _ExpenseState extends State<Expense> {
           padding: const EdgeInsets.only(bottom: 60),
           child: InkWell(
               onTap: () {
+                context.read<AddTrans>().dropdownName=null;
                 Navigator.of(context).pop();
               },
               child: const Icon(Icons.arrow_back)),
@@ -80,7 +79,7 @@ class _ExpenseState extends State<Expense> {
                 Column(
                   children: [
                     SizedBox(
-                      height:height/20,
+                      height: height / 20,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -101,42 +100,35 @@ class _ExpenseState extends State<Expense> {
                               Radius.circular(12.0),
                             ),
                           ),
-                          child: TextButton.icon(
-                            onPressed: () async {
-                              final _selectedDateTemp = await showDatePicker(
-                                  context: context,
-                                  initialDate: DateTime.now(),
-                                  firstDate: DateTime.now()
-                                      .subtract(const Duration(days: 30 * 6)),
-                                  lastDate: DateTime.now());
-                              if (_selectedDateTemp == null) {
-                                return;
-                              } else {
-                                setState(() {
-                                  _selectedDate = _selectedDateTemp;
-                                });
-                              }
-                            },
-                            icon: Icon(
-                              Icons.calendar_month,
-                              size: height / 25,
-                              color: Colors.black54,
-                            ),
-                            label: Text(
-                              // ignore: unnecessary_null_comparison
-                              _selectedDate == null
-                                  ? 'Select Date'
-                                  : DateFormat('MMMMd').format(_selectedDate),
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.black54),
+                          child: Consumer<AddTrans>(
+                            builder: (context, value, _) => 
+                            TextButton.icon(
+                              onPressed: () async {
+                            
+                                value.pickDate(context);
+                                _selectedDate=value.date;
+                              },
+                              icon: Icon(
+                                Icons.calendar_month,
+                                size: height / 25,
+                                color: Colors.black54,
+                              ),
+                              label: Text(
+                                // ignore: unnecessary_null_comparison
+                                value.date == null
+                                    ? 'Select Date'
+                                    : DateFormat('MMMMd').format(value.date),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.black54),
+                              ),
                             ),
                           ),
                         ),
                       ],
                     ),
                     SizedBox(
-                      height:height/20,
+                      height: height / 20,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -158,27 +150,27 @@ class _ExpenseState extends State<Expense> {
                               color: Colors.white),
                           child: Center(
                             child: Padding(
-                              padding:  EdgeInsets.only(left:width/30),
+                              padding: EdgeInsets.only(left: width / 30),
                               child: TextFormField(
                                 controller: _amoundEditingController,
                                 keyboardType: TextInputType.number,
                                 maxLength: 7,
                                 decoration: const InputDecoration(
-                                        border: InputBorder.none,
-                                        counterText: '',
-                                        hintText: 'Enter the Amount..',
-                                        hintStyle: TextStyle(
-                                            fontWeight: FontWeight.w700,
-                                            color: Colors.black54),
-                                      ),
+                                  border: InputBorder.none,
+                                  counterText: '',
+                                  hintText: 'Enter the Amount..',
+                                  hintStyle: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.black54),
+                                ),
                               ),
                             ),
                           ),
                         )
                       ],
                     ),
-                     SizedBox(
-                      height:height/20,
+                    SizedBox(
+                      height: height / 20,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -198,39 +190,52 @@ class _ExpenseState extends State<Expense> {
                                 Radius.circular(12.0),
                               ),
                               color: Colors.white),
-                          child: context.read<CategoryDB>().allExpenseList.isNotEmpty? Padding(
-                            padding:  EdgeInsets.all(width/30),
-                            child:DropdownButtonHideUnderline(
-                              child: DropdownButton(
-                                hint: const Text('select Category',
-                                 style:  TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.black54),),
-                                value: categoryId,
-                                icon:const Icon(Icons.keyboard_arrow_down),
-                                items: context.read<CategoryDB>().allExpenseList
-                                    .map((e) {
-                                  return DropdownMenuItem(
-                                      child: Text(e.name),
-                                      value: e.id,
-                                      onTap: () {
-                                        _selectedCategoryModel = e;
-                                      });
-                                }).toList(),
-                                onChanged: (selectedValue) {
-                                  setState(() {
-                                    categoryId = selectedValue.toString();
-                            
-                                  });
-                                },
-                              ),
-                            ),
-                          ):TextButton.icon(
+                          child: context
+                                  .read<CategoryDB>()
+                                  .allExpenseList
+                                  .isNotEmpty
+                              ? Padding(
+                                  padding: EdgeInsets.all(width / 30),
+                                  child: Consumer<AddTrans>(
+                                    builder: (context, value, _) =>
+                                        DropdownButtonHideUnderline(
+                                      child: DropdownButton(
+                                        hint: const Text(
+                                          'select Category',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w700,
+                                              color: Colors.black54),
+                                        ),
+                                        value: value.dropdownName,
+                                        icon: const Icon(
+                                            Icons.keyboard_arrow_down),
+                                        items: context
+                                            .read<CategoryDB>()
+                                            .allExpenseList
+                                            .map((e) {
+                                          return DropdownMenuItem(
+                                              child: Text(e.name),
+                                              value: e.id,
+                                              onTap: () {
+                                                _selectedCategoryModel = e;
+                                              });
+                                        }).toList(),
+                                        onChanged: (selectedValue) {
+                                          
+                                            value.dropdownButtonRebuild(selectedValue);
+                                            
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : TextButton.icon(
                                   onPressed: () {
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (ctx) =>
-                                                CategoryScreen(selectedController: 1,)));
+                                    Navigator.of(context)
+                                        .push(MaterialPageRoute(
+                                            builder: (ctx) => CategoryScreen(
+                                                  selectedController: 1,
+                                                )));
                                   },
                                   icon: const Icon(
                                     Icons.add,
@@ -246,8 +251,8 @@ class _ExpenseState extends State<Expense> {
                         ),
                       ],
                     ),
-                  SizedBox(
-                      height:height/20,
+                    SizedBox(
+                      height: height / 20,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -269,7 +274,7 @@ class _ExpenseState extends State<Expense> {
                               color: Colors.white),
                           child: Center(
                             child: Padding(
-                              padding: EdgeInsets.only(left:width/30),
+                              padding: EdgeInsets.only(left: width / 30),
                               child: TextFormField(
                                 minLines: 2,
                                 maxLines: 5,
@@ -287,8 +292,8 @@ class _ExpenseState extends State<Expense> {
                         )
                       ],
                     ),
-                   SizedBox(
-                      height:height/15,
+                    SizedBox(
+                      height: height / 15,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -298,7 +303,7 @@ class _ExpenseState extends State<Expense> {
                           width: width / 1.5,
                           child: ElevatedButton(
                             onPressed: () {
-                              addTransaction();
+                              addTransaction(context);
                             },
                             child: const Text('Add To Transactions',
                                 style: TextStyle(
@@ -321,12 +326,11 @@ class _ExpenseState extends State<Expense> {
     );
   }
 
-  Future<void> addTransaction() async {
+  Future<void> addTransaction(BuildContext context) async {
     final _notes = _notesEditingController.text.trim();
     final _amound = _amoundEditingController.text.trim();
-    // if (_notes.isEmpty) {
-    //   return;
-    // }
+    categoryId=context.read<AddTrans>().dropdownName;
+
     if (_amound.isEmpty) {
       snakBarShow(context);
       return;
@@ -335,15 +339,13 @@ class _ExpenseState extends State<Expense> {
       snakBarShow(context);
       return;
     }
-    // ignore: unnecessary_null_comparison
-    if (_selectedDate == null) {
-      return;
-    }
+   
     final convertedAmound = double.tryParse(_amound);
     if (convertedAmound == null) {
       return;
     }
     if (_selectedCategoryModel == null) {
+      
       snakBarShow(context);
       return;
     }
@@ -356,7 +358,8 @@ class _ExpenseState extends State<Expense> {
       id: DateTime.now().millisecondsSinceEpoch.toString(),
     );
     context.read<TransactionDB>().addTransactions(_model);
+    context.read<AddTrans>().dropdownName=null;
+    context.read<AddTrans>().date=DateTime.now();
     Navigator.of(context).pop();
-
   }
 }

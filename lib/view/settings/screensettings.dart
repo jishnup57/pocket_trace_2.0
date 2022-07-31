@@ -31,7 +31,7 @@ class _SreenSettingsState extends State<SreenSettings> {
 
   onClickNotifications(String? payload) {
     Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => MainScreen(),
+      builder: (context) => const MainScreen(),
     ));
     return null;
   }
@@ -68,7 +68,7 @@ class _SreenSettingsState extends State<SreenSettings> {
                   const Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Text(
-                      'Set Dialy Limit',
+                      'Set Daily Limit',
                       textScaleFactor: 1.6,
                       style: TextStyle(
                           fontFamily: 'Settingsfont',

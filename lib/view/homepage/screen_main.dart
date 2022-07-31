@@ -85,7 +85,7 @@ class ScreenHome extends StatelessWidget {
                       height: 8,
                     ),
                     const Text(
-                      'Dially Limit',
+                      'Daily Limit',
                       textScaleFactor: 1.8,
                       style: TextStyle(
                         color: Colors.white,

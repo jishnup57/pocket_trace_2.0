@@ -35,7 +35,7 @@ Future<void>showPopUp(BuildContext context)async{
                   InkWell(
                   onTap: () {
                     Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (ctx) => const Expense()));
+                        MaterialPageRoute(builder: (ctx) =>  Expense()));
                   },
                   child: Card(
                     elevation: 8,
