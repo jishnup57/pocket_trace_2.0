@@ -12,14 +12,10 @@ import 'package:provider/provider.dart';
 
 import '../../Model/Transaction/transaction_model.dart';
 
-class Income extends StatefulWidget {
-  const Income({Key? key}) : super(key: key);
+class Income extends StatelessWidget {
+   Income({Key? key}) : super(key: key);
 
-  @override
-  State<Income> createState() => _IncomeState();
-}
 
-class _IncomeState extends State<Income> {
   DateTime _selectedDate = DateTime.now();
   final CategoryType? _selectedCategoryType = CategoryType.income;
   CategoryModel? _selectedCategoryModel;
