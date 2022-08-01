@@ -30,7 +30,13 @@ class ShowBill extends StatelessWidget {
           padding: const EdgeInsets.all(10),
           child: Consumer<BillDB>(
             builder: (context, value, _) {
-              return ListView.separated(
+              return value.allBillList.isEmpty?
+               const Center(child: Text("Add Some Bills",style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.redAccent
+               ),),):
+               ListView.separated(
                 itemBuilder: (BuildContext context, int index) {
                   final _value = value.allBillList[index];
                   return Container(

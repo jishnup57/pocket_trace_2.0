@@ -18,8 +18,8 @@ class Income extends StatelessWidget {
 
   DateTime _selectedDate = DateTime.now();
   final CategoryType? _selectedCategoryType = CategoryType.income;
-  CategoryModel? _selectedCategoryModel;
-  String? categoryId;
+   CategoryModel? _selectedCategoryModel;
+  
   final _notesEditingController = TextEditingController();
   final _amoundEditingController = TextEditingController();
   @override
@@ -323,7 +323,7 @@ class Income extends StatelessWidget {
   Future<void> addTransaction(BuildContext context) async {
     final _notes = _notesEditingController.text.trim();
     final _amound = _amoundEditingController.text.trim();
-    categoryId = context.read<AddTrans>().dropdownName;
+   String categoryId = context.read<AddTrans>().dropdownName;
     if (_amound.isEmpty) {
       snakBarShow(context);
       return;

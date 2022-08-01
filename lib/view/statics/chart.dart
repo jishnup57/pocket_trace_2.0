@@ -5,7 +5,9 @@ import 'package:one/view/Statics/piechart.dart';
 import 'package:one/view/widget/empty_graph_show.dart';
 import 'package:one/view_model/category/CircularProgress/functions/chartfunction.dart';
 import 'package:one/view_model/category/category_db.dart';
+import 'package:one/view_model/statics/statics_model.dart';
 import 'package:one/view_model/transaction/transaction_db.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 
@@ -56,93 +58,96 @@ class _ChartState extends State<Chart> {
         backgroundColor: kBlueColor,
         centerTitle: true,
       ),
-      body:  Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ChoiceChip(
-                      label: Text(
-                        'Income',
-                        style: TextStyle(
-                          color: (choice == 'Income')
-                              ? Colors.white
-                              : Colors.black,
+      body:  Consumer<Statics>(
+        builder: (context, value, _) => 
+        Column(
+                children: [
+                   Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ChoiceChip(
+                          label: Text(
+                            'Income',
+                            style: TextStyle(
+                              color: (value.choice == 'Income')
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
+                          ),
+                          selectedColor: Colors.green,
+                          selected:value. choice == 'Income' ? true : false,
+                          onSelected: (bool val) {
+                           
+                             value.choiceChipRebuild('Income');
+                              data = chartLogic(
+                                  TransactionDB.instance.incomListNotifier.value);
+                          
+                          },
                         ),
-                      ),
-                      selectedColor: Colors.green,
-                      selected: choice == 'Income' ? true : false,
-                      onSelected: (bool value) {
-                        setState(() {
-                          choice = 'Income';
-                          data = chartLogic(
-                              TransactionDB.instance.incomListNotifier.value);
-                        });
-                      },
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    ChoiceChip(
-                      label: Text(
-                        'Expense',
-                        style: TextStyle(
-                          color: (choice == 'Expense')
-                              ? Colors.white
-                              : Colors.black,
+                        const SizedBox(
+                          width: 5,
                         ),
-                      ),
-                      selectedColor: Colors.red,
-                      selected: choice == 'Expense' ? true : false,
-                      onSelected: (bool value) {
-                        setState(() {
-                          choice = 'Expense';
-                          data = chartLogic(
-                              TransactionDB.instance.expenceListNotifier.value);
-                        });
-                      },
-                    ),
-                     const SizedBox(
-                      width: 5,
-                    ),
-                      ChoiceChip(
-                      label: Text(
-                        'OverAll',
-                        style: TextStyle(
-                          color: (choice == 'OverAll')
-                              ? Colors.white
-                              : Colors.black,
+                        ChoiceChip(
+                          label: Text(
+                            'Expense',
+                            style: TextStyle(
+                              color: (value.choice == 'Expense')
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
+                          ),
+                          selectedColor: Colors.red,
+                          selected:value. choice == 'Expense' ? true : false,
+                          onSelected: (bool val) {
+                         
+                              value.choiceChipRebuild('Expense') ;
+                              data = chartLogic(
+                                  TransactionDB.instance.expenceListNotifier.value);
+                        
+                          },
                         ),
-                      ),
-                      selectedColor: Colors.black,
-                      selected: choice == 'OverAll' ? true : false,
-                      onSelected: (bool value) {
-                        setState(() {
-                          choice = 'OverAll';
-                        });
-                       //overAllChart();
-                      },
-                    )
-                  ],
-                ),data.isEmpty
-          ? emptyGraphBackground(context)
-          :choice=='OverAll'? overAllChart():
-                SfCircularChart(
-                  legend: Legend(
-                    isVisible: true,
+                         const SizedBox(
+                          width: 5,
+                        ),
+                          ChoiceChip(
+                          label: Text(
+                            'OverAll',
+                            style: TextStyle(
+                              color: (value.choice == 'OverAll')
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
+                          ),
+                          selectedColor: Colors.black,
+                          selected:value. choice == 'OverAll' ? true : false,
+                          onSelected: (bool val) {
+                           value.choiceChipRebuild('OverAll');
+                          
+                      
+                          },
+                        )
+                      ],
+                    ),
+                 data.isEmpty
+            ? emptyGraphBackground(context)
+            :value.choice=='OverAll'? overAllChart():
+                  SfCircularChart(
+                    legend: Legend(
+                      isVisible: true,
+                    ),
+                    series: <CircularSeries>[
+                      PieSeries<ChartData, String>(
+                        dataLabelSettings:
+                            const DataLabelSettings(isVisible: true),
+                        dataSource: data,
+                        xValueMapper: (ChartData datas, _) => datas.categories,
+                        yValueMapper: (ChartData datas, _) => datas.amount,
+                      )
+                    ],
                   ),
-                  series: <CircularSeries>[
-                    PieSeries<ChartData, String>(
-                      dataLabelSettings:
-                          const DataLabelSettings(isVisible: true),
-                      dataSource: data,
-                      xValueMapper: (ChartData datas, _) => datas.categories,
-                      yValueMapper: (ChartData datas, _) => datas.amount,
-                    )
-                  ],
-                ),
-              ],
-            ),
+                ],
+              ),
+      ),
     );
   }
 }

@@ -44,7 +44,7 @@ class _SplashScreenState extends State<SplashScreen> {
       gotoLogin();
     }else{
       await Future.delayed(const Duration(seconds: 3));
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx1)=>MainScreen()));
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx1)=>const MainScreen()));
     }
   }
 }
