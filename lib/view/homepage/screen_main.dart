@@ -18,8 +18,6 @@ class ScreenHome extends StatelessWidget {
   const ScreenHome({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    // TransactionDB.instance.refresh();
-    // Functions.instance.getSetamount();
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -102,13 +100,11 @@ class ScreenHome extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          ValueListenableBuilder(
-                              valueListenable:
-                                  TransactionDB.instance.todayExpenseNotifier,
-                              builder: (BuildContext ctx, double _todayExpense,
-                                  Widget? _) {
+                          Consumer<TransactionDB>(
+                            
+                              builder: (BuildContext ctx, expense, _) {
                                 return Text(
-                                  '₹ $_todayExpense',
+                                  '₹ ${expense.todayTotalExpenceonly}',
                                   textScaleFactor: 1.5,
                                   style: const TextStyle(
                                       color: Colors.white,
@@ -117,13 +113,12 @@ class ScreenHome extends StatelessWidget {
                                       fontWeight: FontWeight.w300),
                                 );
                               }),
-                          ValueListenableBuilder(
-                            valueListenable:
-                                Functions.instance.setAmoundNotifier,
+                          Consumer<Functions>(
+                           
                             builder:
-                                (BuildContext ctx, double _setval, Widget? _) {
+                                (BuildContext ctx, setval,  _) {
                               return Text(
-                                '₹ $_setval',
+                                '₹ ${setval.setAmoundNotifier}',
                                 textScaleFactor: 1.5,
                                 style: const TextStyle(
                                     color: Colors.white,

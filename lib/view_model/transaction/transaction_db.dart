@@ -35,8 +35,8 @@ class TransactionDB extends TransactionFunctions with ChangeNotifier{
       List<TransationModel> allIncomeList=[];
   ValueNotifier<List<TransationModel>> expenceListNotifier = ValueNotifier([]);
     List<TransationModel> allExpenceList=[];
-  ValueNotifier<double> todayExpenseNotifier = ValueNotifier(0);
-      double todayTotalExpenceolnly=0;
+ 
+      double todayTotalExpenceonly=0;
   //day list notifiers
   //
   //
@@ -79,8 +79,8 @@ class TransactionDB extends TransactionFunctions with ChangeNotifier{
     totalIncome = 0;
     totalExpense = 0;
     todayExpense = 0;
-    todayExpenseNotifier.value = 0;
-    todayTotalExpenceolnly=0;
+  
+    todayTotalExpenceonly=0;
     incomListNotifier.value.clear();
     allIncomeList.clear();
     expenceListNotifier.value.clear();
@@ -100,8 +100,8 @@ class TransactionDB extends TransactionFunctions with ChangeNotifier{
         String dat = DateFormat('yMd').format(element.date);
         if (dat == newDate) {
           todayExpense = todayExpense + element.amound;
-          todayExpenseNotifier.value = todayExpense;
-          todayTotalExpenceolnly=todayExpense;
+     
+          todayTotalExpenceonly=todayExpense;
         }
       }
     }
@@ -110,7 +110,7 @@ class TransactionDB extends TransactionFunctions with ChangeNotifier{
     // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
     expenceListNotifier.notifyListeners();
     // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
-    todayExpenseNotifier.notifyListeners();
+
     notifyListeners();
   }
 
