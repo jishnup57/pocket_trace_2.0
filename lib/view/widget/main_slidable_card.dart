@@ -5,6 +5,9 @@ import 'package:one/Model/Transaction/transaction_model.dart';
 import 'package:one/Model/category/category_model.dart';
 import 'package:one/view/screen_edit/edit.dart';
 import 'package:one/view/widget/delete_popup.dart';
+import 'package:provider/provider.dart';
+
+import '../../view_model/edit/edit_trans.dart';
 
 class MainSlidableCard extends StatelessWidget {
   const MainSlidableCard({Key? key, required this.value}) : super(key: key);
@@ -27,6 +30,10 @@ class MainSlidableCard extends StatelessWidget {
           ),
           SlidableAction(
             onPressed: (context) {
+              context.read<EditTrans>().setDate(value.date);
+              context.read<EditTrans>().setCategoryType(value.type);
+               context.read<EditTrans>().setCategoryModel(value.category);
+                context.read<EditTrans>().setcategotyid(null);           
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (ctx) => EditScreen(datas: value)));
             },
