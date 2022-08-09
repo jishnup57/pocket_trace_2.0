@@ -12,7 +12,7 @@ import 'package:one/view_model/transaction/transaction_db.dart';
 import 'package:provider/provider.dart';
 import '../../view/widget/circularprogressbar.dart';
 
-const selectedDay = 'SelectedDay';
+
 
 class ScreenHome extends StatelessWidget {
   const ScreenHome({Key? key}) : super(key: key);

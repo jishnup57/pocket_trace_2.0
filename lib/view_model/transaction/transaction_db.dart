@@ -28,8 +28,7 @@ class TransactionDB extends TransactionFunctions with ChangeNotifier{
   double totalExpense = 0;
   double todayExpense = 0;
 
-  ValueNotifier<List<TransationModel>> transactionListNotifier =
-      ValueNotifier([]);
+ 
       List<TransationModel> allTransactionsList=[];
   ValueNotifier<List<TransationModel>> incomListNotifier = ValueNotifier([]);
       List<TransationModel> allIncomeList=[];
@@ -67,14 +66,13 @@ class TransactionDB extends TransactionFunctions with ChangeNotifier{
 
   Future<void> refresh() async {
     var _list = await getAllTransactions();
-    transactionListNotifier.value.clear();
     allTransactionsList.clear();
     _list = _list.reversed.toList();
     _list.sort((first, second) => second.date.compareTo(first.date));
-    transactionListNotifier.value.addAll(_list);
+ 
     allTransactionsList.addAll(_list);
     // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
-    transactionListNotifier.notifyListeners();
+  
 
     totalIncome = 0;
     totalExpense = 0;
@@ -150,7 +148,7 @@ class TransactionDB extends TransactionFunctions with ChangeNotifier{
   }
 
   Future<void> filtration(List<TransationModel> selectedlist) async {
-    //var _list =await getAllTransactions();
+
     todayListNotifier.value.clear();
     todayAllList.clear();
     yesterdayListNotifier.value.clear();
@@ -168,9 +166,7 @@ class TransactionDB extends TransactionFunctions with ChangeNotifier{
         yesterdayListNotifier.value.add(singleModel);
         yesterdayAllList.add(singleModel);
       }
-      //  if (MonthlyDate==eachModelDate) {
-      //    monthelyListNotifier.value.add(singleModel);
-      //  }
+  
     });
     // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
     todayListNotifier.notifyListeners();

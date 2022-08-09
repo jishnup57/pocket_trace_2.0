@@ -121,42 +121,33 @@ class AllTransCtrl with ChangeNotifier {
   Future<List<TransationModel>> filtration(
       List<TransationModel> selectedlist, dynamic drodownName) async {
     mainSelectedlist.clear();
-    // print('$choice--->$drodownName');
-    // List<TransationModel> todayAllList = [];
-    // List<TransationModel> yesterdayAllList = [];
-    // List<TransationModel> monthlyList = [];
-    // List<TransationModel> customAllList = [];
     final todayDateString = DateFormat.yMd().format(DateTime.now());
     final yesterdayDate = DateFormat.yMd()
         .format(DateTime.now().subtract(const Duration(days: 1)));
     int first = int.parse(DateFormat('yyyyMMdd').format(firstdate));
     int last = int.parse(DateFormat('yyyyMMdd').format(lastdate));
- print('$choice--->$drodownName');
     await Future.forEach(tempSelectedList, (TransationModel singleModel) {
       
-      //  print('${singleModel.date.month}---->${pickedmonth.month}');
       String eachModelDate = DateFormat.yMd().format(singleModel.date);
       int modelDate =
           int.parse(DateFormat('yyyyMMdd').format(singleModel.date));
       if (drodownName == 'All') {
         mainSelectedlist.add(singleModel);
       } else if (drodownName == 'Today' && todayDateString == eachModelDate) {
-        //  todayAllList.add(singleModel);
+     
         mainSelectedlist.add(singleModel);
       } else if (drodownName == 'Yesterday' && yesterdayDate == eachModelDate) {
-        // yesterdayAllList.add(singleModel);
+    
         mainSelectedlist.add(singleModel);
       } else if (drodownName == 'Monthly' &&
           singleModel.date.month == pickedmonth.month &&
           singleModel.date.year == pickedmonth.year) {
-        // monthlyList.add(singleModel);
+     
         mainSelectedlist.add(singleModel);
       } else {
         if (
           modelDate >= first &&
           modelDate <= last) {
-        // customAllList.add(singleModel);
-         print('$choice--->$drodownName');
         mainSelectedlist.add(singleModel);
       }
       }
